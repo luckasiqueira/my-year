@@ -1,176 +1,42 @@
 package ui
 
 import "my-year/pkg/database"
+import "strings"
+import "fmt"
 
 templ Home(list map[string]database.Item) {
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minhas Atividades 2026</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-amber-50 min-h-screen p-8">
-    <div class="max-w-7xl mx-auto">
-        <!-- Header -->
-        <div class="text-center mb-12">
-            <h1 class="text-5xl font-bold text-gray-800 mb-3">Meu Ano em Atividades</h1>
-            <p class="text-gray-600 text-lg">Acompanhe tudo o que você fez em 2026</p>
-        </div>
-
-        <!-- Activities Grid -->
-        @Activities(list)
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.min.js"></script>
-</body>
-</html>
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+       <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Minhas Atividades 2026</title>
+          <script src="https://cdn.tailwindcss.com"></script>
+       </head>
+       <body class="bg-amber-50 min-h-screen p-8">
+          <div class="max-w-7xl mx-auto">
+             <!-- Header -->
+             <div class="text-center mb-12">
+                <h1 class="text-5xl font-bold text-gray-800 mb-3">Meu Ano em Atividades</h1>
+                <p class="text-gray-600 text-lg">Acompanhe tudo o que você fez em 2026</p>
+             </div>
+             <!-- Activities Grid -->
+             @Activities(list)
+          </div>
+          <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.min.js"></script>
+       </body>
+    </html>
 }
-
 templ Activities(list map[string]database.Item) {
- <div id="activities" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            <!-- Programar -->
-            <a hx-patch="?action=programar" hx-target="#activities" hx-swap="outerHTML" class="block bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer">
-                <div class="text-white text-center">
-                    <div class="text-4xl mb-3">💻</div>
-                    <h3 class="font-bold text-xl mb-2">{ list["PROGRAMAR"].Name }</h3>
-                    <p class="text-blue-100 text-xl">{ list["PROGRAMAR"].Quantity }</p>
-                </div>
-            </a>
-
-            <!-- Tomar Banho -->
-            <a hx-patch="?action=banhos" hx-target="#activities" hx-swap="outerHTML" class="block bg-gradient-to-br from-cyan-400 to-cyan-500 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer">
-                <div class="text-white text-center">
-                    <div class="text-4xl mb-3">🚿</div>
-                    <h3 class="font-bold text-xl mb-2">{ list["BANHOS"].Name }</h3>
-                    <p class="text-blue-100 text-xl">{ list["BANHOS"].Quantity }</p>
-                </div>
-            </a>
-
-            <!-- Passear -->
-            <a hx-patch="?action=passeios" hx-target="#activities" hx-swap="outerHTML" class="block bg-gradient-to-br from-green-500 to-green-600 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer">
-                <div class="text-white text-center">
-                    <div class="text-4xl mb-3">🚶</div>
-                    <h3 class="font-bold text-xl mb-2">{ list["PASSEIOS"].Name }</h3>
-                    <p class="text-blue-100 text-xl">{ list["PASSEIOS"].Quantity }</p>
-                </div>
-            </a>
-
-            <!-- Dates -->
-            <a hx-patch="?action=dates" hx-target="#activities" hx-swap="outerHTML" class="block bg-gradient-to-br from-pink-500 to-rose-500 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer">
-                <div class="text-white text-center">
-                    <div class="text-4xl mb-3">💕</div>
-                    <h3 class="font-bold text-xl mb-2">{ list["DATES"].Name }</h3>
-                    <p class="text-blue-100 text-xl">{ list["DATES"].Quantity }</p>
-                </div>
-            </a>
-
-            <!-- Exercícios -->
-            <a hx-patch="?action=exercícios" hx-target="#activities" hx-swap="outerHTML" class="block bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer">
-                <div class="text-white text-center">
-                    <div class="text-4xl mb-3">💪</div>
-                    <h3 class="font-bold text-xl mb-2">{ list["EXERCÍCIOS"].Name }</h3>
-                    <p class="text-blue-100 text-xl">{ list["EXERCÍCIOS"].Quantity }</p>
-                </div>
-            </a>
-
-            <!-- Ler -->
-            <a hx-patch="?action=livros" hx-target="#activities" hx-swap="outerHTML" class="block bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer">
-                <div class="text-white text-center">
-                    <div class="text-4xl mb-3">📚</div>
-                    <h3 class="font-bold text-xl mb-2">{ list["LIVROS"].Name }</h3>
-                    <p class="text-blue-100 text-xl">{ list["LIVROS"].Quantity }</p>
-                </div>
-            </a>
-
-            <!-- Cozinhar -->
-            <a hx-patch="?action=cozinhar" hx-target="#activities" hx-swap="outerHTML" class="block bg-gradient-to-br from-amber-500 to-amber-600 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer">
-                <div class="text-white text-center">
-                    <div class="text-4xl mb-3">👨‍🍳</div>
-                    <h3 class="font-bold text-xl mb-2">{ list["COZINHAR"].Name }</h3>
-                    <p class="text-blue-100 text-xl">{ list["COZINHAR"].Quantity }</p>
-                </div>
-            </a>
-
-            <!-- Viajar -->
-            <a hx-patch="?action=viagens" hx-target="#activities" hx-swap="outerHTML" class="block bg-gradient-to-br from-teal-500 to-teal-600 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer">
-                <div class="text-white text-center">
-                    <div class="text-4xl mb-3">✈️</div>
-                    <h3 class="font-bold text-xl mb-2">{ list["VIAGENS"].Name }</h3>
-                    <p class="text-blue-100 text-xl">{ list["VIAGENS"].Quantity }</p>
-                </div>
-            </a>
-
-            <!-- Séries -->
-            <a hx-patch="?action=séries" hx-target="#activities" hx-swap="outerHTML" class="block bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer">
-                <div class="text-white text-center">
-                    <div class="text-4xl mb-3">📺</div>
-                    <h3 class="font-bold text-xl mb-2">{ list["SÉRIES"].Name }</h3>
-                    <p class="text-blue-100 text-xl">{ list["SÉRIES"].Quantity }</p>
-                </div>
-            </a>
-
-            <!-- Assistir Filmes -->
-            <a hx-patch="?action=filmes" hx-target="#activities" hx-swap="outerHTML" class="block bg-gradient-to-br from-red-500 to-red-600 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer">
-                <div class="text-white text-center">
-                    <div class="text-4xl mb-3">🎬</div>
-                    <h3 class="font-bold text-xl mb-2">{ list["FILMES"].Name }</h3>
-                    <p class="text-blue-100 text-xl">{ list["FILMES"].Quantity }</p>
-                </div>
-            </a>
-
-            <!-- Jogar -->
-            <a hx-patch="?action=jogos" hx-target="#activities" hx-swap="outerHTML" class="block bg-gradient-to-br from-violet-500 to-violet-600 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer">
-                <div class="text-white text-center">
-                    <div class="text-4xl mb-3">🎮</div>
-                    <h3 class="font-bold text-xl mb-2">{ list["JOGOS"].Name }</h3>
-                    <p class="text-blue-100 text-xl">{ list["JOGOS"].Quantity }</p>
-                </div>
-            </a>
-
-            <!-- Lanches -->
-            <a hx-patch="?action=lanches" hx-target="#activities" hx-swap="outerHTML" class="block bg-gradient-to-br from-sky-500 to-sky-600 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer">
-                <div class="text-white text-center">
-                    <div class="text-4xl mb-3">🍔</div>
-                    <h3 class="font-bold text-xl mb-2">{ list["LANCHES"].Name }</h3>
-                    <p class="text-blue-100 text-xl">{ list["LANCHES"].Quantity }</p>
-                </div>
-            </a>
-
-            <!-- CAQUINHA -->
-                        <a hx-patch="?action=caquinha" hx-target="#activities" hx-swap="outerHTML" class="block bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer">
-                            <div class="text-white text-center">
-                                <div class="text-4xl mb-3">💩</div>
-                                <h3 class="font-bold text-xl mb-2">{ list["CAQUINHA"].Name }</h3>
-                                <p class="text-blue-100 text-xl">{ list["CAQUINHA"].Quantity }</p>
-                            </div>
-                        </a>
-
-                        <!-- Safadezas -->
-                        <a hx-patch="?action=safadeza" hx-target="#activities" hx-swap="outerHTML" class="block bg-gradient-to-br from-cyan-400 to-cyan-500 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer">
-                            <div class="text-white text-center">
-                                <div class="text-4xl mb-3">🫦</div>
-                                <h3 class="font-bold text-xl mb-2">{ list["SAFADEZA"].Name }</h3>
-                                <p class="text-blue-100 text-xl">{ list["SAFADEZA"].Quantity }</p>
-                            </div>
-                        </a>
-
-                        <!-- Bronha -->
-                        <a hx-patch="?action=rsrs" hx-target="#activities" hx-swap="outerHTML" class="block bg-gradient-to-br from-green-500 to-green-600 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer">
-                            <div class="text-white text-center">
-                                <div class="text-4xl mb-3">💦</div>
-                                <h3 class="font-bold text-xl mb-2">{ list["RSRS"].Name }</h3>
-                                <p class="text-blue-100 text-xl">{ list["RSRS"].Quantity }</p>
-                            </div>
-                        </a>
-
-                        <!-- Amizades novas -->
-                        <a hx-patch="?action=amizades" hx-target="#activities" hx-swap="outerHTML" class="block bg-gradient-to-br from-pink-500 to-rose-500 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer">
-                            <div class="text-white text-center">
-                                <div class="text-4xl mb-3">🫂</div>
-                                <h3 class="font-bold text-xl mb-2">{ list["AMIZADES"].Name }</h3>
-                                <p class="text-blue-100 text-xl">{ list["AMIZADES"].Quantity }</p>
-                            </div>
-                        </a>
-        </div>
+    <div id="activities" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+       for _, l := range list {
+       <a hx-patch={ fmt.Sprintf("?action=%s", strings.ToLower(l.Name)) } hx-target="#activities" hx-swap="outerHTML" class={ fmt.Sprintf("block bg-gradient-to-br %s rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer", l.Class) }>
+       <div class="text-white text-center">
+          <div class="text-4xl mb-3">{ l.Icon }</div>
+          <h3 class="font-bold text-xl mb-2">{ l.Name }</h3>
+          <p class="text-blue-100 text-xl">{ l.Quantity }</p>
+       </div>
+       </a>
+       }
+    </div>
 }

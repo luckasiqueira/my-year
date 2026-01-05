@@ -13,6 +13,8 @@ type Item struct {
 	ID       int
 	Name     string
 	Quantity int
+	Icon     string
+	Class    string
 }
 
 var (
@@ -29,7 +31,7 @@ func connect() *sql.DB {
 }
 
 func List() (map[string]Item, error) {
-	query := fmt.Sprint("SELECT * FROM acoes")
+	query := fmt.Sprint("SELECT * FROM acoes ORDER BY id ASC")
 	rows, err := DB.Query(query)
 	if err != nil {
 		return nil, err
@@ -37,7 +39,7 @@ func List() (map[string]Item, error) {
 	var items []Item
 	for rows.Next() {
 		var item Item
-		rows.Scan(&item.ID, &item.Name, &item.Quantity)
+		rows.Scan(&item.ID, &item.Name, &item.Quantity, &item.Icon, &item.Class)
 		item.Name = strings.ToUpper(item.Name)
 		items = append(items, item)
 	}
