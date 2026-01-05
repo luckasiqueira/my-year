@@ -4,7 +4,7 @@ import "my-year/pkg/database"
 import "strings"
 import "fmt"
 
-templ Home(list map[string]database.Item) {
+templ Home(list []database.Item) {
     <!DOCTYPE html>
     <html lang="pt-BR">
        <head>
@@ -27,7 +27,7 @@ templ Home(list map[string]database.Item) {
        </body>
     </html>
 }
-templ Activities(list map[string]database.Item) {
+templ Activities(list []database.Item) {
     <div id="activities" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
        for _, l := range list {
        <a hx-patch={ fmt.Sprintf("?action=%s", strings.ToLower(l.Name)) } hx-target="#activities" hx-swap="outerHTML" class={ fmt.Sprintf("block bg-gradient-to-br %s rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer", l.Class) }>
